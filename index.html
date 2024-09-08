@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Resume Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 700px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #shareableLink {
+            margin-top: 20px;
+        }
+        #shareableLink a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        #shareableLink a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Create Resume Form</h1>
+    <form id="resumeForm">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" rows="4" required></textarea>
+
+        <label for="personalInfo">Personal Information:</label>
+        <textarea id="personalInfo" name="personalInfo" rows="4" required></textarea>
+
+        <label for="education">Education:</label>
+        <textarea id="education" name="education" rows="4" required></textarea>
+
+        <label for="experience">Experience:</label>
+        <textarea id="experience" name="experience" rows="4" required></textarea>
+
+        <label for="skills">Skills:</label>
+        <textarea id="skills" name="skills" rows="4" required></textarea>
+
+        <label for="certifications">Certifications:</label>
+        <textarea id="certifications" name="certifications" rows="4" required></textarea>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+        <button type="button" onclick="generateCV()">Generate PDF</button>
+        <button type="button" onclick="generateShareableLink()">Generate Shareable Link</button>
+
+        <div id="shareableLink"></div>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    function generateCV() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' }); // Set the page size to A4
+
+        const margins = { top: 10, left: 10, bottom: 10, right: 10 };
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const email = document.getElementById('email').value;
+        const address = document.getElementById('address').value;
+        const personalInfo = document.getElementById('personalInfo').value;
+        const education = document.getElementById('education').value;
+        const experience = document.getElementById('experience').value;
+        const skills = document.getElementById('skills').value;
+        const certifications = document.getElementById('certifications').value;
+
+        doc.setFontSize(18);
+        doc.text(`${firstName} ${lastName}`, margins.left, margins.top + 10);
+
+        doc.setFontSize(12);
+        doc.text(`Phone: ${phoneNumber}`, margins.left, margins.top + 20);
+        doc.text(`Email: ${email}`, margins.left, margins.top + 30);
+        doc.text(`Address: ${address}`, margins.left, margins.top + 40);
+
+        doc.setFontSize(14);
+        doc.text('Personal Information', margins.left, margins.top + 60);
+        doc.setFontSize(12);
+        doc.text(personalInfo, margins.left, margins.top + 70, { maxWidth: pageWidth - 2 * margins.left });
+
+        doc.setFontSize(14);
+        doc.text('Education', margins.left, margins.top + 100);
+        doc.setFontSize(12);
+        doc.text(education, margins.left, margins.top + 110, { maxWidth: pageWidth - 2 * margins.left });
+
+        doc.setFontSize(14);
+        doc.text('Experience', margins.left, margins.top + 140);
+        doc.setFontSize(12);
+        doc.text(experience, margins.left, margins.top + 150, { maxWidth: pageWidth - 2 * margins.left });
+
+        doc.setFontSize(14);
+        doc.text('Skills', margins.left, margins.top + 180);
+        doc.setFontSize(12);
+        doc.text(skills, margins.left, margins.top + 190, { maxWidth: pageWidth - 2 * margins.left });
+
+        doc.setFontSize(14);
+        doc.text('Certifications', margins.left, margins.top + 220);
+        doc.setFontSize(12);
+        doc.text(certifications, margins.left, margins.top + 230, { maxWidth: pageWidth - 2 * margins.left });
+
+        // Save PDF
+        doc.save('resume.pdf');
+    }
+
+    function generateShareableLink() {
+        const username = document.getElementById('username').value.trim();
+        if (username) {
+            const baseURL = "https://example.com/resume/"; // Replace with your actual base URL
+            const uniqueLink = `${baseURL}${encodeURIComponent(username)}`;
+            document.getElementById('shareableLink').innerHTML = `
+                <p>Shareable Link:</p>
+                <a href="${uniqueLink}" target="_blank">${uniqueLink}</a>
+            `;
+        } else {
+            alert("Please enter a username.");
+        }
+    }
+</script>
+
+</body>
+</html>
