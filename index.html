@@ -1,182 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Resume Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 700px;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #shareableLink {
-            margin-top: 20px;
-        }
-        #shareableLink a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        #shareableLink a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editable Resume Builder</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="container">
-    <h1>Create Resume Form</h1>
-    <form id="resumeForm">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" required>
-
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" required>
-
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" required>
-
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" rows="4" required></textarea>
-
-        <label for="personalInfo">Personal Information:</label>
-        <textarea id="personalInfo" name="personalInfo" rows="4" required></textarea>
-
-        <label for="education">Education:</label>
-        <textarea id="education" name="education" rows="4" required></textarea>
-
-        <label for="experience">Experience:</label>
-        <textarea id="experience" name="experience" rows="4" required></textarea>
-
-        <label for="skills">Skills:</label>
-        <textarea id="skills" name="skills" rows="4" required></textarea>
-
-        <label for="certifications">Certifications:</label>
-        <textarea id="certifications" name="certifications" rows="4" required></textarea>
-
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required>
-
-        <button type="button" onclick="generateCV()">Generate PDF</button>
-        <button type="button" onclick="generateShareableLink()">Generate Shareable Link</button>
-
-        <div id="shareableLink"></div>
-    </form>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-    function generateCV() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ unit: 'mm', format: 'a4' }); // Set the page size to A4
-
-        const margins = { top: 10, left: 10, bottom: 10, right: 10 };
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-
-        const firstName = document.getElementById('firstName').value;
-        const lastName = document.getElementById('lastName').value;
-        const phoneNumber = document.getElementById('phoneNumber').value;
-        const email = document.getElementById('email').value;
-        const address = document.getElementById('address').value;
-        const personalInfo = document.getElementById('personalInfo').value;
-        const education = document.getElementById('education').value;
-        const experience = document.getElementById('experience').value;
-        const skills = document.getElementById('skills').value;
-        const certifications = document.getElementById('certifications').value;
-
-        doc.setFontSize(18);
-        doc.text(`${firstName} ${lastName}`, margins.left, margins.top + 10);
-
-        doc.setFontSize(12);
-        doc.text(`Phone: ${phoneNumber}`, margins.left, margins.top + 20);
-        doc.text(`Email: ${email}`, margins.left, margins.top + 30);
-        doc.text(`Address: ${address}`, margins.left, margins.top + 40);
-
-        doc.setFontSize(14);
-        doc.text('Personal Information', margins.left, margins.top + 60);
-        doc.setFontSize(12);
-        doc.text(personalInfo, margins.left, margins.top + 70, { maxWidth: pageWidth - 2 * margins.left });
-
-        doc.setFontSize(14);
-        doc.text('Education', margins.left, margins.top + 100);
-        doc.setFontSize(12);
-        doc.text(education, margins.left, margins.top + 110, { maxWidth: pageWidth - 2 * margins.left });
-
-        doc.setFontSize(14);
-        doc.text('Experience', margins.left, margins.top + 140);
-        doc.setFontSize(12);
-        doc.text(experience, margins.left, margins.top + 150, { maxWidth: pageWidth - 2 * margins.left });
-
-        doc.setFontSize(14);
-        doc.text('Skills', margins.left, margins.top + 180);
-        doc.setFontSize(12);
-        doc.text(skills, margins.left, margins.top + 190, { maxWidth: pageWidth - 2 * margins.left });
-
-        doc.setFontSize(14);
-        doc.text('Certifications', margins.left, margins.top + 220);
-        doc.setFontSize(12);
-        doc.text(certifications, margins.left, margins.top + 230, { maxWidth: pageWidth - 2 * margins.left });
-
-        // Save PDF
-        doc.save('resume.pdf');
-    }
-
-    function generateShareableLink() {
-        const username = document.getElementById('username').value.trim();
-        if (username) {
-            const baseURL = "https://example.com/resume/"; // Replace with your actual base URL
-            const uniqueLink = `${baseURL}${encodeURIComponent(username)}`;
-            document.getElementById('shareableLink').innerHTML = `
-                <p>Shareable Link:</p>
-                <a href="${uniqueLink}" target="_blank">${uniqueLink}</a>
-            `;
-        } else {
-            alert("Please enter a username.");
+    <style>/* General body styling */
+        body {
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f7f6;
+          color: #333;
         }
-    }
-</script>
+        
+        .resume-builder {
+          width: 90%;
+          max-width: 800px;
+          margin: 30px auto;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          text-align: center;
+        }
+        
+        h1, h2, h3, h4 {
+          color: #007ACC;
+        }
+        
+        h1 {
+          margin-bottom: 20px;
+          font-size: 2.2em;
+          font-weight: 600;
+        }
+        
+        input, textarea {
+          width: 100%;
+          padding: 10px;
+          margin: 10px 0 20px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          font-size: 1em;
+        }
+        
+        textarea {
+          resize: vertical;
+        }
+        
+        input:focus, textarea:focus {
+          outline: none;
+          border-color: #007ACC;
+        }
+        
+        label {
+          display: block;
+          text-align: left;
+          color: #007ACC;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        
+        button {
+          background-color: #007ACC;
+          color: #fff;
+          border: none;
+          padding: 12px 20px;
+          border-radius: 5px;
+          font-size: 1em;
+          cursor: pointer;
+          margin: 10px 5px;
+          transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+          background-color: #005F99;
+        }
+        
+        /* Resume display section */
+        .resume-display {
+          text-align: left;
+          background-color: #eef7fa;
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 30px;
+        }
+        
+        .resume-display h3 {
+          margin-bottom: 10px;
+          color: #007ACC;
+          font-size: 1.8em;
+        }
+        
+        .resume-display p {
+          margin: 5px 0;
+        }
+        
+        .resume-display section {
+          margin-top: 20px;
+        }
+        
+        .resume-display h4 {
+          margin-bottom: 5px;
+          color: #005F99;
+        }
+        
+        #shareLinkContainer {
+          margin-top: 20px;
+          font-weight: bold;
+        }
+        
+        /* Media query for responsiveness */
+        @media (max-width: 600px) {
+          .resume-builder {
+            width: 95%;
+          }
+        
+          h1 {
+            font-size: 1.8em;
+          }
+        
+          button {
+            padding: 10px 15px;
+            font-size: 0.9em;
+          }
+        }
+        </style>
+  <div class="resume-builder">
+    <h1>Edit Your Resume</h1>
 
+    <div class="input-section">
+      <label for="nameInput">Name</label>
+      <input type="text" id="nameInput" placeholder="Your Name">
+    </div>
+
+    <div class="input-section">
+      <label for="contactInput">Contact Information</label>
+      <input type="text" id="contactInput" placeholder="Your Address | Phone Number | Email">
+    </div>
+
+    <div class="input-section">
+      <label for="summaryInput">Professional Summary</label>
+      <textarea id="summaryInput" rows="4" placeholder="Write a short summary about yourself"></textarea>
+    </div>
+
+    <div class="input-section">
+      <label for="experienceInput">Professional Experience</label>
+      <textarea id="experienceInput" rows="4" placeholder="List your professional experiences"></textarea>
+    </div>
+
+    <div class="input-section">
+      <label for="educationInput">Education</label>
+      <textarea id="educationInput" rows="2" placeholder="Your degree and school"></textarea>
+    </div>
+
+    <div class="input-section">
+      <label for="skillsInput">Skills</label>
+      <textarea id="skillsInput" rows="2" placeholder="Your skills"></textarea>
+    </div>
+
+    <button id="generateResume">Generate Resume</button>
+    <button id="downloadResume">Download Resume as PDF</button>
+    <button id="shareResume">Share Resume Link</button>
+
+    <h2>Your Resume</h2>
+    <div class="resume-display" id="resumeContent">
+      <h3 id="nameDisplay">Your Name</h3>
+      <p id="contactDisplay">Your Address | Phone Number | Email</p>
+
+      <section>
+        <h4>Professional Summary</h4>
+        <p id="summaryDisplay">A brief summary of your professional experience.</p>
+      </section>
+
+      <section>
+        <h4>Professional Experience</h4>
+        <p id="experienceDisplay">Your work experience will be displayed here.</p>
+      </section>
+
+      <section>
+        <h4>Education</h4>
+        <p id="educationDisplay">Your educational background will be displayed here.</p>
+      </section>
+
+      <section>
+        <h4>Skills</h4>
+        <p id="skillsDisplay">Your skills will be displayed here.</p>
+      </section>
+    </div>
+
+    <p id="shareLinkContainer"></p> <!-- For displaying the shareable link -->
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> <!-- jsPDF library -->
+  <script src="script.js"></script>
 </body>
 </html>
+<script>document.getElementById("generateResume").addEventListener("click", function() {
+    // Get user input
+    const nameInput = document.getElementById("nameInput").value;
+    const contactInput = document.getElementById("contactInput").value;
+    const summaryInput = document.getElementById("summaryInput").value;
+    const experienceInput = document.getElementById("experienceInput").value;
+    const educationInput = document.getElementById("educationInput").value;
+    const skillsInput = document.getElementById("skillsInput").value;
+  
+    // Display the input in the resume section
+    document.getElementById("nameDisplay").textContent = nameInput ? nameInput : "Your Name";
+    document.getElementById("contactDisplay").textContent = contactInput ? contactInput : "Your Address | Phone Number | Email";
+    document.getElementById("summaryDisplay").textContent = summaryInput ? summaryInput : "A brief summary of your professional experience.";
+    document.getElementById("experienceDisplay").textContent = experienceInput ? experienceInput : "Your work experience will be displayed here.";
+    document.getElementById("educationDisplay").textContent = educationInput ? educationInput : "Your educational background will be displayed here.";
+    document.getElementById("skillsDisplay").textContent = skillsInput ? skillsInput : "Your skills will be displayed here.";
+  });
+  
+  document.getElementById("shareResume").addEventListener("click", function() {
+    const name = document.getElementById("nameInput").value;
+    const contact = document.getElementById("contactInput").value;
+    const summary = document.getElementById("summaryInput").value;
+    const experience = document.getElementById("experienceInput").value;
+    const education = document.getElementById("educationInput").value;
+    const skills = document.getElementById("skillsInput").value;
+  
+    // Create a shareable URL with resume data
+    const baseUrl = window.location.href.split('?')[0];
+    const queryParams = new URLSearchParams({
+      name,
+      contact,
+      summary,
+      experience,
+      education,
+      skills
+    });
+  
+    const shareableLink = `${baseUrl}?${queryParams.toString()}`;
+    const shareLinkContainer = document.getElementById("shareLinkContainer");
+    shareLinkContainer.innerHTML = `Share this link: <a href="${shareableLink}" target="_blank">${shareableLink}</a>`;
+    shareLinkContainer.style.color = "blue";
+  });
+  
+  window.addEventListener('load', function() {
+    // Check if there's data in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.has('name')) {
+      document.getElementById("nameInput").value = urlParams.get('name');
+      document.getElementById("contactInput").value = urlParams.get('contact');
+      document.getElementById("summaryInput").value = urlParams.get('summary');
+      document.getElementById("experienceInput").value = urlParams.get('experience');
+      document.getElementById("educationInput").value = urlParams.get('education');
+      document.getElementById("skillsInput").value = urlParams.get('skills');
+  
+      // Trigger the "Generate Resume" button to update the resume display
+      document.getElementById("generateResume").click();
+    }
+  });
+  </script>
+  </body>
+  </html>
